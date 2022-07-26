@@ -15,6 +15,8 @@
  *     }
  * }
  */
+
+// Solution 1: Bottom up
 class Solution {
     int[] res = new int[]{0};
     public int pathSum(TreeNode root, int targetSum) {
@@ -41,5 +43,34 @@ class Solution {
         helper(root.left, res, target - root.val);
         helper(root.right, res, target - root.val);
         return;
+    }
+}
+
+// Solution 2: Top down
+class Solution {
+    public int pathSum(TreeNode root, int targetSum) {
+        List<Integer> arr = new ArrayList<Integer>();
+        int[] res = new int[]{0};
+        DFS(root, targetSum, arr, res);
+        return res[0];
+    }
+
+    // find path where ends at current root node and path sum equals targetSum
+    private void DFS(TreeNode root, int targetSum, List<Integer> arr, int[] res) {
+        if (root == null) return;
+        
+        long sum = 0;
+        arr.add(root.val);
+
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            sum += arr.get(i);
+            if (sum == targetSum) {
+                res[0]++;
+            }
+        }
+
+        DFS(root.left, targetSum, arr, res);
+        DFS(root.right, targetSum, arr, res);
+        arr.remove(arr.size() - 1);
     }
 }
